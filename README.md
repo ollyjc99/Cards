@@ -1,3 +1,3 @@
-# A GAME
+# Cards
 
-#####An attempt to make any kind of game just work PLEASE
+#####A series of classic card games made with PyGame
