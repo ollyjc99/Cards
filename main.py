@@ -69,7 +69,7 @@ def main():
     print(card.face, 'of', card.suit)
 
     # pairs(win, deck)
-    pattern_gen(win, deck)
+    pattern_gen(deck)
 
 
 if __name__ == '__main__':
