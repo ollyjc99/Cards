@@ -1,38 +1,174 @@
 import os
 import pygame
 import random
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 from collections import namedtuple
 
 
-def pattern_gen(deck):
-    card = random.choice(deck)
-
-    running = True
-
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-
-        pygame.display.update()
-
-
 def main():
-    template = Image.open('img/card_base.png')
-    heart = Image.open('img/heart.png')
-    a = (6,8)
-    b = (80,100)
-    fnt = ImageFont.truetype("C:/Windows/Fonts/Arial.ttf", 20)
-    d = ImageDraw.Draw(template)
-    d.text(a, "8", font=fnt, fill=(255,0,0))
+    faces = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']
+    suits = ['hearts','diamonds','spades','clubs']
+    for suit in suits:
+        for face in faces:
+            template = Image.open('img/template/card_base.png')
+            w, h = template.size
+            png_info = template.info
+            icon = Image.open(f'img/template/{suit}.png')
+            icon = icon.resize((9, 9))
+            template.paste(icon, (8,30))
+            fnt = ImageFont.truetype("C:/Windows/Fonts/Arial.ttf", 20)
+            d = ImageDraw.Draw(template)
 
-    png_info = template.info
-    template.paste(heart, (6,30), heart)
-    template.save('img/test_card.png', **png_info)
+            if suit == 'hearts' or suit == 'diamonds':
+                colour = (255,0,0)
+            else:
+                colour = (0,0,0)
+            if face == 'A':
+                d.text((6,8), face, font=fnt, fill=colour)
+            elif face == '10':
+                d.text((2,8), '1', font=fnt, fill=colour)
+                d.text((11, 8), '0', font=fnt, fill=colour)
+            elif face == 'Q':
+                d.text((5,8), face, font=fnt, fill=colour)
+            elif face == 'K':
+                d.text((6,8), face, font=fnt, fill=colour)
+            else:
+                d.text((7,8), face, font=fnt, fill=colour)
 
-    template.show()
+            region = template.crop((0,0, w, h/2))
+            region = region.transpose(Image.ROTATE_180)
+            template.paste(region, (0,64))
+
+            gen_pattern(template, icon, face)
+
+            template.save(f'img/{suit}/{face}.png', **png_info)
 
 
-if __name__=='__main__':
+def gen_pattern(card, icon, face):
+    x = int(card.width/2)
+    y = int(card.height/2)
+    icon = icon.resize((15, 15))
+
+    if face == 'A':
+        ace = icon.resize((30, 30))
+        enhancer = ImageEnhance.Sharpness(ace)
+        enhancer.enhance(2.0)
+        mid_point = (int(x-ace.width/2), int(y-ace.height/2))
+        card.paste(ace, mid_point)
+
+    elif face == 'J':
+        pass
+
+    elif face == 'Q':
+        pass
+
+    elif face == 'K':
+        pass
+
+    else:
+        x = int(card.width / 2 - icon.width / 2)
+        y = int(card.height / 2 - icon.width / 2)
+        points = get_points(face, (x, y))
+        if points:
+            for point in points:
+                card.paste(icon, point)
+
+
+def get_points(face, mid_point):
+    points = []
+    x, y = mid_point
+    if face == '2':
+        points = [
+            (x, int(y/2)),
+            (x, int(y*1.5))
+        ]
+
+    elif face == '3':
+        points = [
+            (x, int(y / 2)),
+            (x, y),
+            (x, int(y * 1.5))
+        ]
+
+    elif face == '4':
+        points = [
+            (int(x*.5), int(y / 2)),
+            (int(x*1.5), int(y / 2)),
+            (int(x*.5), int(y * 1.5)),
+            (int(x*1.5), int(y * 1.5))
+        ]
+
+    elif face == '5':
+        points = [
+            (int(x * .5), int(y / 2)),
+            (int(x * 1.5), int(y / 2)),
+            (x, y),
+            (int(x * .5), int(y * 1.5)),
+            (int(x * 1.5), int(y * 1.5))
+        ]
+
+    elif face == '6':
+        points = [
+            (int(x * .5), int(y / 2)),
+            (int(x * 1.5), int(y / 2)),
+            (int(x * .5), y),
+            (int(x * 1.5), y),
+            (int(x * .5), int(y * 1.5)),
+            (int(x * 1.5), int(y * 1.5))
+        ]
+
+    elif face == '7':
+        points = [
+            (int(x * .5), int(y / 2)),
+            (int(x * 1.5), int(y / 2)),
+            (x, int(y*.75)),
+            (int(x * .5), y),
+            (int(x * 1.5), y),
+            (int(x * .5), int(y * 1.5)),
+            (int(x * 1.5), int(y * 1.5))
+        ]
+
+    elif face == '8':
+        points = [
+            (int(x * .5), int(y / 2)),
+            (int(x * 1.5), int(y / 2)),
+            (x, int(y * .75)),
+            (int(x * .5), y),
+            (int(x * 1.5), y),
+            (x, int(y * 1.25)),
+            (int(x * .5), int(y * 1.5)),
+            (int(x * 1.5), int(y * 1.5))
+        ]
+
+    elif face == '9':
+        points = [
+            (int(x * .5), int(y / 2.3)),
+            (int(x * 1.5), int(y / 2.3)),
+            (x, int(y / 1.5)),
+            (int(x * .5), int(y / 1.15)),
+            (int(x * 1.5), int(y / 1.15)),
+            (int(x * .5), int(y * 1.3)),
+            (int(x * 1.5), int(y * 1.3)),
+            (int(x * .5), int(y * 1.7)),
+            (int(x * 1.5), int(y * 1.7))
+        ]
+
+    elif face == '10':
+        points = [
+            (int(x * .5), int(y / 2.3)),
+            (int(x * 1.5), int(y / 2.3)),
+            (x, int(y / 1.5)),
+            (x, int(y * 1.5)),
+            (int(x * .5), int(y / 1.15)),
+            (int(x * 1.5), int(y / 1.15)),
+            (int(x * .5), int(y * 1.3)),
+            (int(x * 1.5), int(y * 1.3)),
+            (int(x * .5), int(y * 1.7)),
+            (int(x * 1.5), int(y * 1.7))
+        ]
+
+    return points
+
+
+if __name__ == '__main__':
     main()

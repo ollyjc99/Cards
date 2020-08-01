@@ -7,7 +7,7 @@ from pattern_gen import *
 
 
 class Card(object):
-    def __init__(self, win, width, height, suit, face, href='img/hearts/8.png'):
+    def __init__(self, win, width, height, suit, face, href='img/hearts/ace.png'):
         self.win = win
         self.width = width
         self.height = int(height)
