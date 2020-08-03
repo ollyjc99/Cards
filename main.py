@@ -36,6 +36,7 @@ class Card(object):
         else:
             return pygame.image.load(self.back)
 
+
 def main():
     win_width = 800
     win_height = 600
