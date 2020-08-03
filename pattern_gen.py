@@ -8,14 +8,15 @@ from collections import namedtuple
 def main():
     faces = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']
     suits = ['hearts','diamonds','spades','clubs']
+
     for suit in suits:
         for face in faces:
             template = Image.open('img/template/card_base.png')
             w, h = template.size
             png_info = template.info
             icon = Image.open(f'img/template/{suit}.png')
-            icon = icon.resize((9, 9))
-            template.paste(icon, (8,30))
+            small_icon = icon.resize((9, 9))
+            template.paste(small_icon, (8,30))
             fnt = ImageFont.truetype("C:/Windows/Fonts/Arial.ttf", 20)
             d = ImageDraw.Draw(template)
 
@@ -47,14 +48,12 @@ def main():
 def gen_pattern(card, icon, face):
     x = int(card.width/2)
     y = int(card.height/2)
-    icon = icon.resize((15, 15))
 
     if face == 'A':
-        ace = icon.resize((30, 30))
-        enhancer = ImageEnhance.Sharpness(ace)
+        enhancer = ImageEnhance.Sharpness(icon)
         enhancer.enhance(2.0)
-        mid_point = (int(x-ace.width/2), int(y-ace.height/2))
-        card.paste(ace, mid_point)
+        mid_point = (int(x-icon.width/2), int(y-icon.height/2))
+        card.paste(icon, mid_point)
 
     elif face == 'J':
         pass
@@ -66,6 +65,7 @@ def gen_pattern(card, icon, face):
         pass
 
     else:
+        icon = icon.resize((15, 15))
         x = int(card.width / 2 - icon.width / 2)
         y = int(card.height / 2 - icon.width / 2)
         points = get_points(face, (x, y))
