@@ -11,13 +11,13 @@ def main():
 
     for suit in suits:
         for face in faces:
-            template = Image.open('img/template/card_base.png')
+            template = Image.open('static/img/template/card_base.png')
             w, h = template.size
             png_info = template.info
-            icon = Image.open(f'img/template/{suit}.png')
+            icon = Image.open(f'static/img/template/{suit}.png')
             small_icon = icon.resize((9, 9))
             template.paste(small_icon, (8,30))
-            fnt = ImageFont.truetype("C:/Windows/Fonts/Arial.ttf", 20)
+            fnt = ImageFont.truetype("static/font/Arial.ttf", 20)
             d = ImageDraw.Draw(template)
 
             if suit == 'hearts' or suit == 'diamonds':
@@ -40,15 +40,15 @@ def main():
             region = region.transpose(Image.ROTATE_180)
             template.paste(region, (0,64))
 
-            gen_pattern(template, icon, face)
+            gen_pattern(template, icon, face, d, colour)
 
-            template.save(f'img/{suit}/{face}.png', **png_info)
+            template.save(f'static/img/{suit}/{face}.png', **png_info)
 
 
-def gen_pattern(card, icon, face):
+def gen_pattern(card, icon, face, d, colour):
     x = int(card.width/2)
     y = int(card.height/2)
-
+    fnt = ImageFont.truetype("static/font/Backslash-RpJol.otf", 42)
     if face == 'A':
         enhancer = ImageEnhance.Sharpness(icon)
         enhancer.enhance(2.0)
@@ -56,13 +56,13 @@ def gen_pattern(card, icon, face):
         card.paste(icon, mid_point)
 
     elif face == 'J':
-        pass
+        d.text((x-5,y-20), 'J', font=fnt, fill=colour)
 
     elif face == 'Q':
-        pass
+        d.text((x-15, y - 20), 'Q', font=fnt, fill=colour)
 
     elif face == 'K':
-        pass
+        d.text((x-13, y - 20), 'K', font=fnt, fill=colour)
 
     else:
         icon = icon.resize((15, 15))
