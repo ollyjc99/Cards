@@ -21,17 +21,20 @@ def match(first, second):
 
 def pairs(win, deck):
     print(win.get_size())
-    grid = [[[x, y] for x in range(66, 734, 100+13)] for y in range(71, 529, 128+35)]
-    deck = random.sample(deck, 18)
+    grid = [[[x, y] for x in range(13, 1267, 90+7)] for y in range(187, 960-187, 115+36)]
+    deck = random.sample(deck, 52)
     p_deck = iter(deck)
     win.fill((75,125,75))
     pygame.display.set_caption('Pairs')
-
+    count = 0
     first, second = None, None
 
     for row in grid:
         for col in row:
             card = next(p_deck)
+            count +=1
+
+            print(count)
             card.x, card.y = col
             card.draw(col)
 

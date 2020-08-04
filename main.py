@@ -37,10 +37,10 @@ class Card(object):
 
 
 def main():
-    win_width = 800
-    win_height = 600
+    win_width = 1280
+    win_height = 768
 
-    card_width = 100
+    card_width = 90
     card_height = int(card_width*1.28)
 
     win = pygame.display.set_mode((win_width, win_height))
