@@ -9,7 +9,6 @@ def flip(card):
     card.im = card.flip()
     card.draw((card.x, card.y))
     pygame.display.update()
-    # pygame.time.wait(1000)
 
 
 def match(first, second):
