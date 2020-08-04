@@ -4,12 +4,30 @@ from PIL import Image
 from collections import namedtuple
 
 
+def flip(card):
+    card.flipped = not card.flipped
+    card.im = card.flip()
+    card.draw((card.x, card.y))
+    pygame.display.update()
+    # pygame.time.wait(1000)
+
+
+def match(first, second):
+    if first.face == second.face:
+        return True
+    else:
+        return False
+
+
 def pairs(win, deck):
     print(win.get_size())
     grid = [[[x, y] for x in range(66, 734, 100+13)] for y in range(71, 529, 128+35)]
     deck = random.sample(deck, 18)
     p_deck = iter(deck)
     win.fill((75,125,75))
+    pygame.display.set_caption('Pairs')
+
+    first, second = None, None
 
     for row in grid:
         for col in row:
@@ -26,8 +44,21 @@ def pairs(win, deck):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for card in deck:
                     if card.im.get_rect(x=card.x, y=card.y).collidepoint(event.pos):
-                        card.flipped = not card.flipped
-                        card.im = card.flip()
-                        card.draw((card.x, card.y))
+                        if not card.flipped:
+                            if not first:
+                                first = card
+                                flip(card)
+                            elif first and not second:
+                                flip(card)
+                                second = card
+                                if match(first, second):
+                                    first, second = None, None
+                                else:
+                                    pygame.time.wait(1000)
+                                    flip(first)
+                                    flip(second)
+                                    first, second = None, None
+                            else:
+                                pass
 
         pygame.display.update()

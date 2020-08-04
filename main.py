@@ -27,7 +27,6 @@ class Card(object):
             return 255, 0, 0
 
     def draw(self, pos):
-        # self.im = self.flip()
         self.win.blit(pygame.transform.scale(self.im, (self.width, self.height)), pos)
 
     def flip(self):
@@ -45,6 +44,7 @@ def main():
     card_height = int(card_width*1.28)
 
     win = pygame.display.set_mode((win_width, win_height))
+    pygame.display.set_icon(pygame.image.load('static/img/template/spades.png'))
 
     suits = ['spades', 'clubs', 'diamonds', 'hearts']
     faces = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
@@ -60,4 +60,5 @@ def main():
 
 
 if __name__ == '__main__':
+    pygame.init()
     main()
