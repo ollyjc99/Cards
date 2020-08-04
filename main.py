@@ -37,26 +37,20 @@ class Card(object):
 
 
 def main():
-    win_width = 1280
-    win_height = 768
+    # Generates Cards
+    # pattern_gen.main()
 
-    card_width = 90
-    card_height = int(card_width*1.28)
+    win_width = 1024
+    win_height = 768
 
     win = pygame.display.set_mode((win_width, win_height))
     pygame.display.set_icon(pygame.image.load('static/img/template/spades.png'))
 
     suits = ['spades', 'clubs', 'diamonds', 'hearts']
     faces = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
-    # test = [[face, suit] for face in faces for suit in suits]
-    # for face, suit in test:
-    #     print(suit, face)
+    deck = [[face, suit] for face in faces for suit in suits]
 
-    # Generates Cards
-    # pattern_gen.main()
-    deck = [Card(win, card_width, card_height, suit, face) for suit in suits for face in faces]
-
-    pairs(win, deck)
+    pairs(1280, 720, Card, deck)
 
 
 if __name__ == '__main__':

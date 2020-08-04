@@ -4,6 +4,23 @@ from PIL import Image
 from collections import namedtuple
 
 
+def setup(win):
+    width, height = win.get_size()
+
+    card_width = round(width*.07)
+    card_height = round(height*.15)
+
+    x_spacing = width-(card_width*13)
+    x_bord = round((x_spacing*.33) / 2)
+    x_btwn = round((x_spacing*.66) / 13)
+
+    y_spacing = height-(card_height*4)
+    y_bord = round((y_spacing*.90) / 2)
+    y_btwn = round((y_spacing*.10) / 2)
+
+    return card_width, card_height, x_bord, y_bord, x_btwn, y_btwn
+
+
 def flip(card):
     card.flipped = not card.flipped
     card.im = card.flip()
@@ -18,22 +35,20 @@ def match(first, second):
         return False
 
 
-def pairs(win, deck):
-    print(win.get_size())
-    grid = [[[x, y] for x in range(13, 1267, 90+7)] for y in range(187, 960-187, 115+36)]
-    deck = random.sample(deck, 52)
-    p_deck = iter(deck)
-    win.fill((75,125,75))
+def pairs(win_width, win_height, base, deck):
+    win = pygame.display.set_mode((win_width, win_height))
     pygame.display.set_caption('Pairs')
-    count = 0
+    win.fill((75,125,75))
+    card_width, card_height, x_bord, y_bord, x_btwn, y_btwn = setup(win)
+    grid = [[[x, y] for x in range(x_bord, win_width-x_bord, card_width+x_btwn)] for y in range(round(y_bord*1.75), win_height-round(y_bord*.25), card_height+y_btwn)]
+    deck = [base(win, card_width, card_height, suit, face) for face, suit in random.sample(deck, 52)]
+    p_deck = iter(deck)
+
     first, second = None, None
 
     for row in grid:
         for col in row:
             card = next(p_deck)
-            count +=1
-
-            print(count)
             card.x, card.y = col
             card.draw(col)
 
