@@ -42,7 +42,7 @@ def main():
 
     win_width = 1024
     win_height = 768
-
+    clock = pygame.time.Clock()
     win = pygame.display.set_mode((win_width, win_height))
     pygame.display.set_icon(pygame.image.load('static/img/template/spades.png'))
 
@@ -50,7 +50,7 @@ def main():
     faces = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
     deck = [[face, suit] for face in faces for suit in suits]
 
-    pairs(1280, 720, Card, deck)
+    pairs(1280, 720, Card, deck, clock)
 
 
 if __name__ == '__main__':

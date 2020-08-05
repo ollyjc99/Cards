@@ -46,7 +46,7 @@ def match(first, second):
         return False
 
 
-def pairs(win_width, win_height, base, deck):
+def pairs(win_width, win_height, base, deck, clock):
     win = pygame.display.set_mode((win_width, win_height))
     pygame.display.set_caption('Pairs')
     background_colour = (75,125,75)
@@ -82,6 +82,7 @@ def pairs(win_width, win_height, base, deck):
 
     running = True
     while running:
+        clock.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
