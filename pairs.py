@@ -31,7 +31,6 @@ def print_score(win, win_width, win_height, font, count):
     win.blit(pair_count, count_rect)
 
 
-
 def flip(card):
     card.flipped = not card.flipped
     card.im = card.flip()

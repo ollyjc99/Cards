@@ -3,6 +3,7 @@ import random
 from PIL import Image
 from collections import namedtuple
 from pairs import *
+from bus import bus
 import pattern_gen
 
 
@@ -44,13 +45,14 @@ def main():
     win_height = 768
     clock = pygame.time.Clock()
     win = pygame.display.set_mode((win_width, win_height))
-    pygame.display.set_icon(pygame.image.load('static/img/template/spades.png'))
+    pygame.display.set_icon(pygame.image.load('static/img/template/diamonds.png'))
 
     suits = ['spades', 'clubs', 'diamonds', 'hearts']
     faces = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
     deck = [[face, suit] for face in faces for suit in suits]
 
-    pairs(1280, 720, Card, deck, clock)
+    # pairs(1280, 720, Card, deck, clock)
+    bus(1024, 768, Card, deck, 5, clock)
 
 
 if __name__ == '__main__':
