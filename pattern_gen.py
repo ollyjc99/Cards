@@ -2,7 +2,6 @@ import os
 import pygame
 import random
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance
-from collections import namedtuple
 
 
 def main():
