@@ -4,6 +4,7 @@ from PIL import Image
 from collections import namedtuple
 from pairs import *
 from bus import bus
+from sandbox import sandbox
 import pattern_gen
 
 
@@ -17,15 +18,40 @@ class Card(object):
         self.face = face
         self.flipped = False
         self.im = self.flip()
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
 
-    def draw(self, pos):
-        self.win.blit(pygame.transform.scale(self.im, (self.width, self.height)), pos)
+    def set_rect(self):
+        self.x -= round(self.width / 2)
+        self.y -= round(self.height / 2)
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.rect.center = (self.x + round(self.width // 2), self.y + round(self.height // 2))
+
+    def draw(self, pos=None):
+        if pos:
+            self.x, self.y = pos
+            self.rect.center = (self.x + round(self.width // 2), self.y + round(self.height // 2))
+            self.win.blit(self.im, self.rect)
+            self.win.blit(pygame.transform.scale(self.im, (self.width, self.height)), pos)
+
+    def move(self, pos):
+        self.x, self.y = pos
+        self.rect = self.im.get_rect()
+        self.rect.center = (pos)
+        self.win.blit(self.im, self.rect)
 
     def flip(self):
         if self.flipped:
             return pygame.image.load(f'static/img/{self.suit}/{self.face}.png')
         else:
             return pygame.image.load('static/img/template/card_back.png')
+
+    def check(self):
+        return self.rect.collidepoint(pygame.mouse.get_pos())
+
+
+class Deck(object):
+    def __init__(self, deck):
+        self.deck = deck
 
 
 def main():
@@ -42,7 +68,8 @@ def main():
     deck = [[face, suit] for face in faces for suit in suits]
 
     # pairs(1280, 720, Card, deck, clock)
-    bus(1024, 768, Card, deck, 5, clock)
+    # bus(1024, 768, Card, deck, 5, clock)
+    sandbox(1024, 768, Card, deck, clock)
 
 
 if __name__ == '__main__':
