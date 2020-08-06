@@ -3,13 +3,27 @@ import random
 
 
 def setup(win, bus_len):
-    width, height = win.get_size()
+    w, h = win.get_size()
 
-    card_width = round(width*.098)
-    card_height = round(height*.167)
-    # grid = [[x,y] for x in range(
+    card_width = round(w*.098)
+    card_height = round(h*.167)
 
-    return card_width, card_height, 'grid'
+    x_spacing = round(w-(card_width * bus_len))
+    x_bord = 242
+    x_btwn = 10
+
+    y = round((h // 2) - card_height / 2)
+
+    grid = [[x,y] for x in range(x_bord, w-x_bord, card_width+x_btwn)]
+
+    return card_width, card_height, grid
+
+
+def flip(card):
+    card.flipped = not card.flipped
+    card.im = card.flip()
+    card.draw((card.x, card.y))
+    pygame.display.update()
 
 
 def bus(win_width, win_height, base, deck, bus_len, clock):
@@ -19,15 +33,25 @@ def bus(win_width, win_height, base, deck, bus_len, clock):
     win.fill(background_colour)
 
     card_width, card_height, grid = setup(win, bus_len)
-    deck = [base(win, card_width, card_height, suit, face) for face, suit in random.sample(deck, 52)]
+    deck = [base(win, card_width, card_height, suit, face) for face, suit in random.sample(deck, bus_len)]
     p_deck = iter(deck)
+
+    for row in grid:
+        print(row)
+        card = next(p_deck)
+        card.x, card.y = row
+        card.draw(row)
 
     running = True
     while running:
-        clock(60)
+        # clock(60)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
 
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for card in deck:
+                    if card.im.get_rect(x=card.x, y=card.y).collidepoint(event.pos):
+                        flip(card)
         pygame.display.update()
 
