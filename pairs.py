@@ -38,13 +38,6 @@ def flip(card):
     pygame.display.update()
 
 
-def match(first, second):
-    if first.face == second.face:
-        return True
-    else:
-        return False
-
-
 def pairs(win_width, win_height, base, deck, clock):
     win = pygame.display.set_mode((win_width, win_height))
     pygame.display.set_caption('Pairs')
@@ -72,7 +65,6 @@ def pairs(win_width, win_height, base, deck, clock):
     p_deck = iter(deck)
 
     first, second = None, None
-
     for row in grid:
         for col in row:
             card = next(p_deck)
@@ -96,7 +88,7 @@ def pairs(win_width, win_height, base, deck, clock):
                             elif first and not second:
                                 flip(card)
                                 second = card
-                                if match(first, second):
+                                if first.face == second.face:
                                     count+=1
                                     print_score(win, win_width, win_height, font, count)
                                     first, second = None, None
