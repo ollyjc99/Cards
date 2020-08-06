@@ -44,7 +44,7 @@ def bus(win_width, win_height, base, deck, bus_len, clock):
 
     running = True
     while running:
-        # clock(60)
+        clock.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
