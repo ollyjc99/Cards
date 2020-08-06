@@ -41,8 +41,8 @@ def main():
     faces = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
     deck = [[face, suit] for face in faces for suit in suits]
 
-    pairs(1280, 720, Card, deck, clock)
-    # bus(1024, 768, Card, deck, 5, clock)
+    # pairs(1280, 720, Card, deck, clock)
+    bus(1024, 768, Card, deck, 5, clock)
 
 
 if __name__ == '__main__':
