@@ -9,15 +9,20 @@ import pattern_gen
 
 
 class Deck(object):
-    def __init__(self, cards):
-        self.x = 0
-        self.y = 0
+    def __init__(self, win, cards):
+        self.win = win
+        self.x = 50
+        self.y = 50
         self.cards = cards
-        self.im = pygame.image.load('static/img/template/card_back.png')
-        self.rect = self.im.get_rect()
+        self.im = pygame.image.load('static/img/template/deck.png')
+        self.rect = self.im.get_rect(x=self.x, y=self.y)
 
-    def callback(self):
-        return self.deck
+    def draw(self, pos=None):
+        if pos:
+            self.x, self.y = pos
+
+        self.rect = self.im.get_rect(x=self.x, y=self.y)
+        self.win.blit(self.im, self.rect)
 
 
 class Card(object):
@@ -68,7 +73,7 @@ def setup(win):
     faces = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
     list_of_cards = [[face, suit] for face in faces for suit in suits]
     temp_deck = [Card(win, 100, 128, suit, face) for face, suit in random.sample(list_of_cards, 52)]
-    deck = Deck(temp_deck)
+    deck = Deck(win, temp_deck)
 
     return deck
 
@@ -76,6 +81,7 @@ def setup(win):
 def main():
     # Generates Cards
     # pattern_gen.main()
+
     clock = pygame.time.Clock()
     win_width = 1024
     win_height = 768
@@ -83,10 +89,10 @@ def main():
     pygame.display.set_icon(pygame.image.load('static/img/template/diamonds.png'))
 
     deck = setup(win)
-    print(deck.cards)
+
     # pairs(1280, 720, Card, deck, clock)
     # bus(1024, 768, Card, deck, 5, clock)
-    # sandbox(1024, 768, deck, clock)
+    sandbox(1024, 768, deck, clock)
 
 
 if __name__ == '__main__':
