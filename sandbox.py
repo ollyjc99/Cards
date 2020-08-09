@@ -12,6 +12,14 @@ def setup(win):
     return card_width, card_height
 
 
+def card_check(card, pos):
+    if card.im.get_rect(x=card.x, y=card.y).collidepoint(pos):
+        return True
+    else:
+        return False
+
+
+
 def flip(card):
     card.flipped = not card.flipped
     card.im = card.flip()
@@ -44,20 +52,23 @@ def sandbox(win_width, win_height, base, deck, clock):
             if event.type == pygame.QUIT:
                 pygame.quit()
 
-            # if event.type == pygame.VIDEORESIZE:
-            #     win = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-
             if event.type == pygame.MOUSEBUTTONDOWN:
-                pressed = True
-                for card in deck:
-                    if card.im.get_rect(x=card.x, y=card.y).collidepoint(event.pos):
-                        while pressed:
-                            for e in pygame.event.get():
-                                if e.type != pygame.MOUSEBUTTONUP:
-                                    redraw_win(win, card)
-                                    card.set_rect()
-                                elif e.type == pygame.MOUSEBUTTONUP:
-                                    pressed = False
+                if event.button == 1:
+                    pressed = True
+                    for card in deck:
+                        if card_check(card, event.pos):
+                            while pressed:
+                                for e in pygame.event.get():
+                                    if e.type != pygame.MOUSEBUTTONUP:
+                                        redraw_win(win, card)
+                                        card.set_rect()
+                                    elif e.type == pygame.MOUSEBUTTONUP:
+                                        pressed = False
+
+                elif event.button == 3:
+                    for card in deck:
+                        if card_check(card, event.pos):
+                            flip(card)
 
         pygame.display.update()
 
