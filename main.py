@@ -32,12 +32,13 @@ class Card(object):
             self.rect.center = (self.x + round(self.width // 2), self.y + round(self.height // 2))
             self.win.blit(self.im, self.rect)
             self.win.blit(pygame.transform.scale(self.im, (self.width, self.height)), pos)
+        else:
+            self.win.blit(self.im, self.rect)
 
     def move(self, pos):
         self.x, self.y = pos
-        self.rect = self.im.get_rect()
         self.rect.center = (pos)
-        self.win.blit(self.im, self.rect)
+        self.draw()
 
     def flip(self):
         if self.flipped:
