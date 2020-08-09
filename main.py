@@ -8,6 +8,18 @@ from sandbox import sandbox
 import pattern_gen
 
 
+class Deck(object):
+    def __init__(self, cards):
+        self.x = 0
+        self.y = 0
+        self.cards = cards
+        self.im = pygame.image.load('static/img/template/card_back.png')
+        self.rect = self.im.get_rect()
+
+    def callback(self):
+        return self.deck
+
+
 class Card(object):
     def __init__(self, win, width, height, suit, face):
         self.win = win
@@ -50,9 +62,15 @@ class Card(object):
         return self.rect.collidepoint(pygame.mouse.get_pos())
 
 
-class Deck(object):
-    def __init__(self, deck):
-        self.deck = deck
+def setup(win):
+
+    suits = ['spades', 'clubs', 'diamonds', 'hearts']
+    faces = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+    list_of_cards = [[face, suit] for face in faces for suit in suits]
+    temp_deck = [Card(win, 100, 128, suit, face) for face, suit in random.sample(list_of_cards, 52)]
+    deck = Deck(temp_deck)
+
+    return deck
 
 
 def main():
@@ -64,13 +82,11 @@ def main():
     win = pygame.display.set_mode((win_width, win_height))
     pygame.display.set_icon(pygame.image.load('static/img/template/diamonds.png'))
 
-    suits = ['spades', 'clubs', 'diamonds', 'hearts']
-    faces = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
-    deck = [[face, suit] for face in faces for suit in suits]
-
+    deck = setup(win)
+    print(deck.cards)
     # pairs(1280, 720, Card, deck, clock)
     # bus(1024, 768, Card, deck, 5, clock)
-    sandbox(1024, 768, Card, deck, clock)
+    # sandbox(1024, 768, deck, clock)
 
 
 if __name__ == '__main__':
