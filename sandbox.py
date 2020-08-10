@@ -33,10 +33,11 @@ def flip(card):
 def redraw_win(win, card, deck, hand):
     win.fill((75, 125, 75))
     deck.draw()
-    if hand:
-        for card in hand:
-            card.draw()
     card.move(pygame.mouse.get_pos())
+
+    for card in hand:
+        card.draw()
+
     pygame.display.update()
 
 
@@ -62,25 +63,13 @@ def sandbox(win_width, win_height, deck, clock):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pressed = True
                 if event.button == 1:
-                    if hand:
-                        for card in hand:
-                            if card_check(card, event.pos):
-                                while pressed:
-                                    for e in pygame.event.get():
-                                        if e.type != pygame.MOUSEBUTTONUP:
-                                            redraw_win(win, card, deck, hand)
-                                            card.set_rect()
-                                        elif e.type == pygame.MOUSEBUTTONUP:
-                                            pressed = False
 
                     if deck.cards:
                         if card_check(deck.cards[0], event.pos):
+                            print(deck.cards[0])
                             card = deck.cards[0]
-                            hand.append(card)
-                            print(deck.cards[0].face)
                             deck.cards.pop(0)
-                            for card in hand:
-                                print(f'{card.face} of {card.suit}')
+                            hand.append(card)
                             while pressed:
                                 for e in pygame.event.get():
                                     if e.type != pygame.MOUSEBUTTONUP:
@@ -89,8 +78,20 @@ def sandbox(win_width, win_height, deck, clock):
                                     elif e.type == pygame.MOUSEBUTTONUP:
                                         pressed = False
 
+                    if hand:
+                        for card in hand:
+                            if card_check(card, event.pos):
+                                pressed = True
+                                while pressed:
+                                    for e in pygame.event.get():
+                                        if e.type != pygame.MOUSEBUTTONUP:
+                                            redraw_win(win, card, deck, hand)
+                                            card.set_rect()
+                                        elif e.type == pygame.MOUSEBUTTONUP:
+                                            pressed = False
+
                 elif event.button == 2:
-                    for card in deck.cards:
+                    for card in hand:
                         print(f'{card.face} of {card.suit}')
 
                 elif event.button == 3:
@@ -99,6 +100,11 @@ def sandbox(win_width, win_height, deck, clock):
                             if card_check(card, event.pos):
                                 flip(card)
                                 break
+
+                    for card in deck.cards:
+                        if card_check(card, event.pos):
+                            flip(card)
+                            break
 
         pygame.display.update()
 
