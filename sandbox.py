@@ -33,10 +33,12 @@ def flip(card):
 def redraw_win(win, card, deck, hand):
     win.fill((75, 125, 75))
     deck.draw()
-    card.move(pygame.mouse.get_pos())
+    if card:
+        card.move(pygame.mouse.get_pos())
 
-    for card in hand:
-        card.draw()
+    if hand:
+        for card in hand:
+            card.draw()
 
     pygame.display.update()
 
@@ -46,7 +48,7 @@ def sandbox(win_width, win_height, deck, clock):
     pygame.display.set_caption('The Bus')
     win.fill((75, 125, 75))
 
-    deck.draw((win_width // 2,win_height // 2))
+    deck.draw((round(win_width * .85), round(win_height * .80)))
     setup(win, deck)
     hand = []
     card = random.choice(deck.cards)
@@ -91,7 +93,7 @@ def sandbox(win_width, win_height, deck, clock):
                                             pressed = False
 
                 elif event.button == 2:
-                    for card in hand:
+                    for card in deck.cards:
                         print(f'{card.face} of {card.suit}')
 
                 elif event.button == 3:
@@ -106,5 +108,17 @@ def sandbox(win_width, win_height, deck, clock):
                             flip(card)
                             break
 
+                elif event.button == 4:
+                    if hand:
+                        for card in hand:
+                            deck.cards.append(card)
+                            hand.pop(0)
+
+        if hand:
+            if deck.rect.collidelist(hand) != -1:
+                i = deck.rect.collidelist(hand)
+                deck.cards.append(hand[i])
+                hand.pop(i)
+                redraw_win(win, None, deck, hand)
         pygame.display.update()
 

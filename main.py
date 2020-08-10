@@ -11,8 +11,8 @@ import pattern_gen
 class Deck(object):
     def __init__(self, win, cards):
         self.win = win
-        self.x = 50
-        self.y = 50
+        self.x = 0
+        self.y = 0
         self.cards = cards
         self.im = pygame.image.load('static/img/template/deck.png')
         self.rect = self.im.get_rect(x=self.x, y=self.y)
