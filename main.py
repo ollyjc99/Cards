@@ -28,7 +28,8 @@ class Deck(object):
 class Card(object):
     def __init__(self, win, width, height, suit, face):
         self.win = win
-        self.x = 0; self.y = 0
+        self.x = 0
+        self.y = 0
         self.width = width
         self.height = height
         self.suit = suit
@@ -54,7 +55,7 @@ class Card(object):
 
     def move(self, pos):
         self.x, self.y = pos
-        self.rect.center = (pos)
+        self.rect.center = pos
         self.draw()
 
     def flip(self):
@@ -62,9 +63,6 @@ class Card(object):
             return pygame.image.load(f'static/img/{self.suit}/{self.face}.png')
         else:
             return pygame.image.load('static/img/template/card_back.png')
-
-    def check(self):
-        return self.rect.collidepoint(pygame.mouse.get_pos())
 
 
 def setup(win):
