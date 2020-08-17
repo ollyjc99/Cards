@@ -18,15 +18,18 @@ class Deck(object):
         self.win.blit(self.im, self.rect)
 
 
-class Card(pygame.sprite.Sprite):
-    def __init__(self, win, width, height, suit, face):
+class Card(object):
+    def __init__(self, suit, face):
+        self.face = face
+        self.suit = suit
+
+
+class CardSprite(pygame.sprite.Sprite):
+    def __init__(self, card):
         pygame.sprite.Sprite.__init__(self)
         self.flipped = False
+        self.suit, self.face = card
         self.image = self.flip()
-        self.width = width
-        self.height = height
-        self.suit = suit
-        self.face = face
         self.rect = self.image.get_rect()
 
     def update(self):

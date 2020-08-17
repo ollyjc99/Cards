@@ -1,6 +1,7 @@
 import pygame
 import random
 import time
+from cards import *
 
 
 def setup(win, deck):
@@ -26,53 +27,65 @@ def flip(card):
     card.im = card.flip()
 
 
-def sandbox(win_width, win_height, deck, clock):
-    win = pygame.display.set_mode((win_width, win_height))
+def sandbox(w, h, deck, clock):
+    win = pygame.display.set_mode((w, h))
     pygame.display.set_caption('The Bus')
     win.fill((75, 125, 75))
 
-    deck.draw((round(win_width * .85), round(win_height * .80)))
     setup(win, deck)
 
     hand = pygame.sprite.Group()
 
     running = True
-    while running:
-        clock.tick(60)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
+    try:
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                pressed = True
-                if event.button == 1:
-                    pass
+        while running:
+            clock.tick(60)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
 
-                elif event.button == 2:
-                    for card in deck.cards:
-                        print(f'{card.face} of {card.suit}')
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pressed = True
+                    if event.button == 1:
+                        if deck.rect.collidepoint(event.pos):
+                            if deck.cards:
+                                card = deck.cards[0]
+                                hand.add(CardSprite((card.suit, card.face)))
 
-                elif event.button == 3:
-                    if hand:
-                        for card in hand:
+
+                    elif event.button == 2:
+                        for card in deck.cards:
+                            print(f'{card.face} of {card.suit}')
+
+                    elif event.button == 3:
+                        if hand:
+                            for card in hand:
+                                if card_check(card, event.pos):
+                                    flip(card)
+                                    break
+
+                        for card in deck.cards:
                             if card_check(card, event.pos):
                                 flip(card)
                                 break
 
-                    for card in deck.cards:
-                        if card_check(card, event.pos):
-                            flip(card)
-                            break
+                    elif event.button == 4:
+                        if hand:
+                            for card in hand:
+                                deck.cards.append(card)
+                                hand.remove(0)
 
-                elif event.button == 4:
-                    if hand:
-                        for card in hand:
-                            deck.cards.append(card)
-                            hand.remove(0)
+            win.fill((75, 125, 75))
 
-        win.fill((75, 125, 75))
+            hand.update()
 
-        hand.update()
-        hand.draw(win)
-        pygame.display.update()
+            deck.draw((round(w * .88), round(h * .80)))
+            hand.draw(win)
+            pygame.display.update()
 
+    except KeyboardInterrupt:
+        pass
+
+    except pygame.error:
+        pass
