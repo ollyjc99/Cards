@@ -10,14 +10,12 @@ def setup(win, deck):
     card_height = round(h*.167)
 
     for card in deck.cards:
-        card.x = deck.x
-        card.y = deck.y
         card.width = card_width
         card.height = card_height
 
 
 def card_check(card, pos):
-    if card.im.get_rect(x=card.x, y=card.y).collidepoint(pos):
+    if card.im.get_rect(x=card.rect.x, y=card.rect.y).collidepoint(pos):
         return True
     else:
         return False
@@ -26,8 +24,6 @@ def card_check(card, pos):
 def flip(card):
     card.flipped = not card.flipped
     card.im = card.flip()
-    card.draw((card.x, card.y))
-    pygame.display.update()
 
 
 def sandbox(win_width, win_height, deck, clock):
@@ -50,31 +46,7 @@ def sandbox(win_width, win_height, deck, clock):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pressed = True
                 if event.button == 1:
-
-                    if deck.cards:
-                        if card_check(deck.cards[0], event.pos):
-                            print(deck.cards[0])
-                            card = deck.cards[0]
-                            deck.cards.pop(0)
-                            hand.add(card)
-                            while pressed:
-                                for e in pygame.event.get():
-                                    if e.type != pygame.MOUSEBUTTONUP:
-                                        card.set_rect()
-                                    elif e.type == pygame.MOUSEBUTTONUP:
-                                        pressed = False
-
-                    if hand:
-                        for card in hand:
-                            if card_check(card, event.pos):
-                                pressed = True
-                                while pressed:
-                                    for e in pygame.event.get():
-                                        if e.type != pygame.MOUSEBUTTONUP:
-                                            redraw_win(win, card, deck, hand)
-                                            card.set_rect()
-                                        elif e.type == pygame.MOUSEBUTTONUP:
-                                            pressed = False
+                    pass
 
                 elif event.button == 2:
                     for card in deck.cards:
@@ -98,12 +70,9 @@ def sandbox(win_width, win_height, deck, clock):
                             deck.cards.append(card)
                             hand.remove(0)
 
-        if hand:
-            if deck.rect.collidelist(hand) != -1:
-                i = deck.rect.collidelist(hand)
-                deck.cards.append(hand[i])
-                hand.remove(i)
-
         win.fill((75, 125, 75))
+
+        hand.update()
+        hand.draw(win)
         pygame.display.update()
 
