@@ -4,7 +4,7 @@ from PIL import Image
 from collections import namedtuple
 
 
-def setup(win):
+def setup(win, deck):
     width, height = win.get_size()
 
     card_width = round(width*.07)
@@ -18,7 +18,7 @@ def setup(win):
     y_bord = round((y_spacing*.90) / 2)
     y_btwn = round((y_spacing*.10) / 2)
 
-    return card_width, card_height, [[[x, y] for x in range(x_bord, width-x_bord, card_width+x_btwn)] for y in range(round(y_bord*1.75), height-round(y_bord*.25), card_height+y_btwn)]
+    return [[[x, y] for x in range(x_bord, width-x_bord, card_width+x_btwn)] for y in range(round(y_bord*1.75), height-round(y_bord*.25), card_height+y_btwn)]
 
 
 def print_score(win, win_width, win_height, font, count):
@@ -35,10 +35,10 @@ def flip(card):
     card.flipped = not card.flipped
     card.im = card.flip()
     card.draw((card.x, card.y))
-    pygame.display.update()
+    pygame.display.flip()
 
 
-def pairs(win_width, win_height, base, deck, clock):
+def pairs(win_width, win_height, deck, clock):
     win = pygame.display.set_mode((win_width, win_height))
     pygame.display.set_caption('Pairs')
     background_colour = (75,125,75)
@@ -59,10 +59,9 @@ def pairs(win_width, win_height, base, deck, clock):
     win.blit(score, score_rect)
 
     print_score(win, win_width, win_height, font, count)
+    grid = setup(win, deck)
 
-    card_width, card_height, grid = setup(win)
-    deck = [base(win, card_width, card_height, suit, face) for face, suit in random.sample(deck, 52)]
-    p_deck = iter(deck)
+    p_deck = iter(deck.cards)
 
     first, second = None, None
     for row in grid:
@@ -79,7 +78,7 @@ def pairs(win_width, win_height, base, deck, clock):
                 pygame.quit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                for card in deck:
+                for card in deck.cards:
                     if card.im.get_rect(x=card.x, y=card.y).collidepoint(event.pos):
                         if not card.flipped:
                             if not first:

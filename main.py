@@ -25,16 +25,18 @@ class Deck(object):
         self.win.blit(self.im, self.rect)
 
 
-class Card(object):
+class Card(pygame.sprite.Sprite):
     def __init__(self, win, width, height, suit, face):
+        pygame.sprite.Sprite.__init__(self)
         self.win = win
+        self.flipped = False
+        self.image = self.flip()
         self.x = 0
         self.y = 0
         self.width = width
         self.height = height
         self.suit = suit
         self.face = face
-        self.flipped = False
         self.im = self.flip()
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
 
@@ -88,7 +90,7 @@ def main():
 
     deck = setup(win)
 
-    # pairs(1280, 720, Card, deck, clock)
+    # pairs(1280, 720, deck, clock)
     # bus(1024, 768, Card, deck, 5, clock)
     sandbox(1024, 768, deck, clock)
 

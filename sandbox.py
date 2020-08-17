@@ -30,19 +30,6 @@ def flip(card):
     pygame.display.update()
 
 
-def redraw_win(win, card, deck, hand):
-    win.fill((75, 125, 75))
-    deck.draw()
-    if card:
-        card.move(pygame.mouse.get_pos())
-
-    if hand:
-        for card in hand:
-            card.draw()
-
-    pygame.display.update()
-
-
 def sandbox(win_width, win_height, deck, clock):
     win = pygame.display.set_mode((win_width, win_height))
     pygame.display.set_caption('The Bus')
@@ -50,10 +37,8 @@ def sandbox(win_width, win_height, deck, clock):
 
     deck.draw((round(win_width * .85), round(win_height * .80)))
     setup(win, deck)
-    hand = []
-    card = random.choice(deck.cards)
 
-    print(f'{card.face} of {card.suit}')
+    hand = pygame.sprite.Group()
 
     running = True
     while running:
@@ -71,11 +56,10 @@ def sandbox(win_width, win_height, deck, clock):
                             print(deck.cards[0])
                             card = deck.cards[0]
                             deck.cards.pop(0)
-                            hand.append(card)
+                            hand.add(card)
                             while pressed:
                                 for e in pygame.event.get():
                                     if e.type != pygame.MOUSEBUTTONUP:
-                                        redraw_win(win, card, deck, hand)
                                         card.set_rect()
                                     elif e.type == pygame.MOUSEBUTTONUP:
                                         pressed = False
@@ -112,13 +96,14 @@ def sandbox(win_width, win_height, deck, clock):
                     if hand:
                         for card in hand:
                             deck.cards.append(card)
-                            hand.pop(0)
+                            hand.remove(0)
 
         if hand:
             if deck.rect.collidelist(hand) != -1:
                 i = deck.rect.collidelist(hand)
                 deck.cards.append(hand[i])
-                hand.pop(i)
-                redraw_win(win, None, deck, hand)
+                hand.remove(i)
+
+        win.fill((75, 125, 75))
         pygame.display.update()
 
