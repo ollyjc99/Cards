@@ -1,4 +1,6 @@
 import pygame
+import time
+from threading import Thread
 
 
 class Deck(object):
@@ -40,3 +42,18 @@ class CardSprite(pygame.sprite.Sprite):
             return pygame.image.load(f'static/img/{self.suit}/{self.face}.png')
         else:
             return pygame.image.load('static/img/template/card_back.png')
+
+
+class DragCard(Thread):
+    def __init__(self, card):
+        Thread.__init__(self)
+        self.daemon = True
+        self.card = card
+        self.running = True
+        self.start()
+
+    def run(self):
+        while self.running:
+            print(f'{self.card.face} of {self.card.suit}')
+            self.card.center = pygame.mouse.get_pos()
+            print(self.card.center)
