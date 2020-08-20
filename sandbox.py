@@ -87,7 +87,7 @@ def sandbox(w, h, deck, clock):
                         if selected_card.rect.colliderect(deck):
                             deck.cards.append(Card(selected_card.suit, selected_card.face))
                             selected_card.kill()
-                            
+
                         selected_card = None
                         pressed = False
 
