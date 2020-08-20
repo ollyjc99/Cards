@@ -35,7 +35,6 @@ def sandbox(w, h, deck, clock):
     setup(win, deck)
     hand = pygame.sprite.Group()
     table = pygame.sprite.Group()
-
     pressed = False
     running = True
     selected_card = None
@@ -58,15 +57,13 @@ def sandbox(w, h, deck, clock):
 
                             if deck.cards:
                                 if deck.rect.collidepoint(event.pos):
-                                    card = deck.cards[0]
+                                    selected_card = deck.cards[0]
                                     deck.cards.pop(0)
-                                    selected_card = CardSprite((card.suit, card.face))
                                     hand.add(selected_card)
                                     selected_card.rect.center = pygame.mouse.get_pos()
 
                         elif event.button == 2:
-                            for card in deck.cards:
-                                print(f'{card.face} of {card.suit}')
+                            pass
 
                         elif event.button == 3:
                             if hand:
@@ -85,7 +82,7 @@ def sandbox(w, h, deck, clock):
 
                     if event.type == pygame.MOUSEBUTTONUP:
                         if selected_card.rect.colliderect(deck):
-                            deck.cards.append(Card(selected_card.suit, selected_card.face))
+                            deck.cards.append(selected_card)
                             selected_card.kill()
 
                         selected_card = None
@@ -95,6 +92,7 @@ def sandbox(w, h, deck, clock):
             hand.update()
             deck.draw((round(w * .88), round(h * .80)))
             hand.draw(win)
+            print(deck)
             pygame.display.update()
 
     except KeyboardInterrupt:

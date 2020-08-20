@@ -9,30 +9,31 @@ class Deck(object):
         self.x = 0
         self.y = 0
         self.cards = cards
-        self.im = pygame.image.load('static/img/template/deck.png')
-        self.rect = self.im.get_rect(x=self.x, y=self.y)
+        self.image = pygame.image.load('static/img/template/deck.png')
+        self.rect = self.image.get_rect(x=self.x, y=self.y)
+
+    def __str__(self):
+        return f'Deck of {len(self.cards)} cards'
 
     def draw(self, pos=None):
         if pos:
             self.x, self.y = pos
 
-        self.rect = self.im.get_rect(x=self.x, y=self.y)
-        self.win.blit(self.im, self.rect)
+        self.rect = self.image.get_rect(x=self.x, y=self.y)
+        self.win.blit(self.image, self.rect)
 
 
-class Card(object):
+class Card(pygame.sprite.Sprite):
     def __init__(self, suit, face):
-        self.face = face
-        self.suit = suit
-
-
-class CardSprite(pygame.sprite.Sprite):
-    def __init__(self, card):
         pygame.sprite.Sprite.__init__(self)
         self.flipped = False
-        self.suit, self.face = card
+        self.suit = suit
+        self.face = face
         self.image = self.flip()
         self.rect = self.image.get_rect()
+
+    def __str__(self):
+        return f'{self.face} of {self.suit}'
 
     def update(self):
         pass
