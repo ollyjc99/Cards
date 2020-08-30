@@ -55,6 +55,4 @@ class DragCard(Thread):
 
     def run(self):
         while self.running:
-            print(f'{self.card.face} of {self.card.suit}')
             self.card.center = pygame.mouse.get_pos()
-            print(self.card.center)
