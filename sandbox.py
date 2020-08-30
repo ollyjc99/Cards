@@ -2,6 +2,7 @@ import pygame
 import random
 import time
 from cards import *
+from misc import *
 
 
 def setup(win, deck):
@@ -13,18 +14,6 @@ def setup(win, deck):
     for card in deck.cards:
         card.width = card_width
         card.height = card_height
-
-
-def card_check(card, pos):
-    if card.im.get_rect(x=card.rect.x, y=card.rect.y).collidepoint(pos):
-        return True
-    else:
-        return False
-
-
-def flip(card):
-    card.flipped = not card.flipped
-    card.image = card.flip()
 
 
 def sandbox(w, h, deck, clock):
