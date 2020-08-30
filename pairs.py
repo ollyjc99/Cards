@@ -1,7 +1,6 @@
 import pygame
 import random
-from PIL import Image
-from collections import namedtuple
+from misc import *
 
 
 def setup(win, deck):
@@ -31,13 +30,6 @@ def print_score(win, win_width, win_height, font, count):
     win.blit(pair_count, count_rect)
 
 
-def flip(card):
-    card.flipped = not card.flipped
-    card.im = card.flip()
-    card.draw((card.x, card.y))
-    pygame.display.flip()
-
-
 def pairs(win_width, win_height, deck, clock):
     win = pygame.display.set_mode((win_width, win_height))
     pygame.display.set_caption('Pairs')
@@ -62,24 +54,25 @@ def pairs(win_width, win_height, deck, clock):
     grid = setup(win, deck)
 
     p_deck = iter(deck.cards)
+    cards = pygame.sprite.Group()
+    cards.add(deck.cards)
 
     first, second = None, None
     for row in grid:
         for col in row:
             card = next(p_deck)
-            card.x, card.y = col
-            card.draw(col)
+            card.rect.x, card.rect.y = col
 
+    cards.add(deck.cards)
     running = True
     while running:
-        clock.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for card in deck.cards:
-                    if card.im.get_rect(x=card.x, y=card.y).collidepoint(event.pos):
+                    if card.rect.collidepoint(event.pos):
                         if not card.flipped:
                             if not first:
                                 first = card
@@ -88,7 +81,7 @@ def pairs(win_width, win_height, deck, clock):
                                 flip(card)
                                 second = card
                                 if first.face == second.face:
-                                    count+=1
+                                    count += 1
                                     print_score(win, win_width, win_height, font, count)
                                     first, second = None, None
                                 else:
@@ -99,4 +92,7 @@ def pairs(win_width, win_height, deck, clock):
                             else:
                                 pass
 
+        cards.update()
+        cards.draw(win)
         pygame.display.update()
+        clock.tick(60)
