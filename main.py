@@ -27,8 +27,8 @@ def main():
 
     deck = setup(win)
 
-    pairs(1280, 720, deck, clock)
-    # bus(1024, 768, deck, 5, clock)
+    # pairs(1280, 720, deck, clock)
+    bus(1024, 768, deck, 5, clock)
     # sandbox(1024, 768, deck, clock)
 
 
