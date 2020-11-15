@@ -66,6 +66,16 @@ def pairs(win_width, win_height, deck, clock):
     cards.add(deck.cards)
     running = True
     while running:
+        if second:
+            if first.face == second.face:
+                count += 1
+                print_score(win, win_width, win_height, font, count)
+                first, second = None, None
+            else:
+                pygame.time.wait(1000)
+                flip(first)
+                flip(second)
+                first, second = None, None
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -80,15 +90,6 @@ def pairs(win_width, win_height, deck, clock):
                             elif first and not second:
                                 flip(card)
                                 second = card
-                                if first.face == second.face:
-                                    count += 1
-                                    print_score(win, win_width, win_height, font, count)
-                                    first, second = None, None
-                                else:
-                                    pygame.time.wait(1000)
-                                    flip(first)
-                                    flip(second)
-                                    first, second = None, None
                             else:
                                 pass
 
