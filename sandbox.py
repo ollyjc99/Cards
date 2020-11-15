@@ -18,7 +18,7 @@ def setup(win, deck):
 
 def sandbox(w, h, deck, clock):
     win = pygame.display.set_mode((w, h))
-    pygame.display.set_caption('The Bus')
+    pygame.display.set_caption('The @')
     win.fill((75, 125, 75))
 
     setup(win, deck)
@@ -81,7 +81,7 @@ def sandbox(w, h, deck, clock):
             hand.update()
             deck.draw((round(w * .88), round(h * .80)))
             hand.draw(win)
-            print(deck)
+            print(*hand)
             pygame.display.update()
 
     except KeyboardInterrupt:
