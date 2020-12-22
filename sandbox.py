@@ -24,7 +24,6 @@ def sandbox(w, h, deck, clock):
     setup(win, deck)
     hand = pygame.sprite.Group()
     table = pygame.sprite.Group()
-    pressed = False
     running = True
     selected_card = None
     try:
@@ -36,7 +35,6 @@ def sandbox(w, h, deck, clock):
 
                 if not selected_card:
                     if event.type == pygame.MOUSEBUTTONDOWN:
-                        pressed = True
                         if event.button == 1:
                             if hand:
                                 for card in hand:
@@ -75,13 +73,11 @@ def sandbox(w, h, deck, clock):
                             selected_card.kill()
 
                         selected_card = None
-                        pressed = False
 
             win.fill((75, 125, 75))
             hand.update()
             deck.draw((round(w * .88), round(h * .80)))
             hand.draw(win)
-            print(*hand)
             pygame.display.update()
 
     except KeyboardInterrupt:
